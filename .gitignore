@@ -1,0 +1,36 @@
+# Ambientes virtuais
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Configurações locais
+.env
+.env.*
+*.log
+
+# Saídas geradas pela automação
+output/*
+!output/.gitkeep
+
+# Arquivos de entrada locais
+input/pdf/*
+!input/pdf/.gitkeep
+input/images/*
+!input/images/.gitkeep
+
+# Sistema operacional e IDEs
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

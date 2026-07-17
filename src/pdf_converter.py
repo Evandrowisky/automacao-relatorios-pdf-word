@@ -3,8 +3,6 @@
 import logging
 from pathlib import Path
 
-from docx2pdf import convert
-
 
 LOGGER = logging.getLogger(__name__)
 
@@ -18,7 +16,14 @@ def convert_docx_to_pdf(docx_path: Path, pdf_path: Path) -> Path:
     LOGGER.info("Convertendo DOCX para PDF: %s", pdf_path)
 
     try:
+        from docx2pdf import convert
+
         convert(str(docx_path), str(pdf_path))
+    except ModuleNotFoundError as error:
+        raise RuntimeError(
+            "A dependência docx2pdf não está instalada. Instale as dependências "
+            "com 'pip install -r requirements.txt' para gerar o PDF final."
+        ) from error
     except Exception as error:
         raise RuntimeError(
             "Falha ao converter DOCX para PDF. Verifique se o Microsoft Word "

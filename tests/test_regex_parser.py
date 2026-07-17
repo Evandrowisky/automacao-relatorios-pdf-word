@@ -10,6 +10,7 @@ SRC_DIR = Path(__file__).resolve().parents[1] / "src"
 sys.path.append(str(SRC_DIR))
 
 from regex_parser import extract_field, parse_fields  # noqa: E402
+from config import NOT_FOUND_VALUE  # noqa: E402
 
 
 class RegexParserTest(unittest.TestCase):
@@ -27,14 +28,14 @@ class RegexParserTest(unittest.TestCase):
         self.assertEqual(result["titulo"], "Relatório Mensal")
         self.assertEqual(result["cliente"], "Empresa Exemplo")
 
-    def test_extract_field_returns_empty_string_when_not_found(self) -> None:
+    def test_extract_field_returns_not_found_when_missing(self) -> None:
         logging.disable(logging.WARNING)
         try:
             result = extract_field("Sem o campo esperado", "data", r"Data:\s*(.+)")
         finally:
             logging.disable(logging.NOTSET)
 
-        self.assertEqual(result, "")
+        self.assertEqual(result, NOT_FOUND_VALUE)
 
 
 if __name__ == "__main__":

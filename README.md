@@ -2,41 +2,44 @@
 
 ![Banner do projeto](docs/architecture.png)
 
-Automação em Python para extrair informações de arquivos PDF, estruturar os dados com expressões regulares, preencher um modelo Word e gerar um relatório final em PDF.
+Ferramenta em Python para extrair texto e dados estruturados de arquivos PDF, exportando os resultados para TXT, CSV, Excel, Word e PDF.
 
-O projeto foi organizado com foco em portfólio, manutenção e evolução: módulos pequenos, responsabilidades bem definidas, configuração centralizada, logs, tratamento de exceções e documentação em português.
+O projeto foi construído com foco em portfólio, organização profissional e evolução contínua. A arquitetura modular facilita a manutenção, a criação de novos exportadores e a adaptação dos padrões de extração para diferentes tipos de documentos.
 
 ## Problema resolvido
 
-Processos manuais de criação de relatórios costumam envolver leitura de PDFs, cópia de informações, montagem de documentos Word, inclusão de imagens e exportação final para PDF. Esse fluxo é repetitivo, sujeito a erros humanos e difícil de escalar.
+Empresas e profissionais frequentemente recebem relatórios em PDF e precisam transformar essas informações em formatos editáveis, auditáveis ou prontos para análise. Fazer isso manualmente consome tempo, dificulta padronização e aumenta o risco de erro.
 
 ## Solução
 
-Este projeto automatiza o fluxo de ponta a ponta:
+A aplicação processa um ou mais PDFs dentro de `input/pdf/`, extrai o texto por página, aplica Regex para obter campos estruturados e gera os formatos escolhidos pelo usuário.
 
-1. Localiza um PDF de entrada.
-2. Extrai o texto do documento.
-3. Aplica padrões regex para capturar campos relevantes.
-4. Valida imagens opcionais.
-5. Preenche um modelo Word com placeholders.
-6. Converte o relatório gerado para PDF.
-7. Registra logs organizados durante a execução.
+| Formato | Finalidade |
+| --- | --- |
+| TXT | Texto integral extraído |
+| CSV | Dados estruturados e leves |
+| XLSX | Análise e filtros no Excel |
+| DOCX | Relatório editável |
+| PDF | Relatório final formatado |
 
 ## Arquitetura
 
 ![Arquitetura](docs/architecture.png)
 
-Cada módulo possui uma única responsabilidade:
+Cada módulo possui uma responsabilidade clara:
 
-- `main.py`: orquestra o fluxo principal.
-- `config.py`: centraliza caminhos e padrões configuráveis.
-- `pdf_reader.py`: extrai texto de PDFs.
-- `regex_parser.py`: transforma texto livre em dados estruturados.
-- `word_generator.py`: gera o relatório Word a partir do modelo.
-- `image_handler.py`: valida imagens usadas no relatório.
+- `main.py`: orquestra CLI, múltiplos PDFs e exportações.
+- `config.py`: centraliza caminhos, Regex e formatos padrão.
+- `pdf_reader.py`: extrai texto por página e texto completo.
+- `regex_parser.py`: transforma texto em dados estruturados.
+- `text_exporter.py`: gera TXT com o texto integral.
+- `csv_exporter.py`: gera CSV consolidado.
+- `excel_exporter.py`: gera XLSX formatado.
+- `word_generator.py`: gera DOCX a partir de modelo.
 - `pdf_converter.py`: converte DOCX para PDF.
-- `validator.py`: valida entradas e saídas obrigatórias.
-- `utils.py`: reúne utilidades compartilhadas.
+- `image_handler.py`: valida imagens usadas no relatório Word.
+- `validator.py`: valida entradas e saídas.
+- `utils.py`: concentra utilidades reutilizáveis.
 
 ## Fluxograma
 
@@ -49,8 +52,10 @@ Cada módulo possui uma única responsabilidade:
 - python-docx
 - docx2pdf
 - Pillow
-- Logging nativo do Python
-- Expressões regulares com `re`
+- openpyxl
+- argparse
+- logging
+- unittest
 
 ## Estrutura do projeto
 
@@ -62,13 +67,16 @@ automacao-relatorios-pdf-word/
 ├── .gitignore
 ├── src/
 │   ├── main.py
+│   ├── config.py
 │   ├── pdf_reader.py
 │   ├── regex_parser.py
+│   ├── text_exporter.py
+│   ├── csv_exporter.py
+│   ├── excel_exporter.py
 │   ├── word_generator.py
-│   ├── image_handler.py
 │   ├── pdf_converter.py
+│   ├── image_handler.py
 │   ├── validator.py
-│   ├── config.py
 │   └── utils.py
 ├── templates/
 │   └── modelo_relatorio.docx
@@ -81,8 +89,9 @@ automacao-relatorios-pdf-word/
 │   ├── workflow.png
 │   └── demo.gif
 ├── examples/
-│   ├── exemplo.pdf
-│   └── imagens/
+│   ├── pdfs/
+│   ├── resultados/
+│   └── README.md
 └── tests/
 ```
 
@@ -91,7 +100,7 @@ automacao-relatorios-pdf-word/
 Clone o repositório:
 
 ```bash
-git clone https://github.com/seu-usuario/automacao-relatorios-pdf-word.git
+git clone https://github.com/Evandrowisky/automacao-relatorios-pdf-word.git
 cd automacao-relatorios-pdf-word
 ```
 
@@ -110,47 +119,72 @@ pip install -r requirements.txt
 
 ## Como executar
 
-1. Adicione um arquivo PDF em `input/pdf/`.
-2. Adicione imagens opcionais em `input/images/`.
-3. Ajuste os placeholders do arquivo `templates/modelo_relatorio.docx`, se necessário.
-4. Execute:
+Adicione um ou mais arquivos PDF em:
+
+```text
+input/pdf/
+```
+
+Execute com os formatos desejados:
 
 ```bash
-python src/main.py
+python src/main.py --txt
+python src/main.py --xlsx
+python src/main.py --csv --xlsx
+python src/main.py --txt --csv --xlsx
+python src/main.py --all
 ```
 
-O relatório final será gerado em:
+Também é possível executar sem argumentos. Nesse caso, a aplicação usa os formatos definidos em `src/config.py`.
 
-```text
-output/relatorio_gerado.pdf
-```
-
-O log da execução será salvo em:
-
-```text
-output/automacao.log
-```
-
-## Como executar os testes
-
-Os testes usam `unittest`, biblioteca padrão do Python:
+Para ver todos os argumentos:
 
 ```bash
-python -m unittest discover tests
+python src/main.py --help
 ```
 
-## Exemplo de uso
+## Saídas geradas
 
-O modelo Word usa placeholders no formato:
+As saídas são organizadas por tipo:
 
 ```text
-{{titulo}}
-{{cliente}}
-{{data}}
-{{resumo}}
+output/
+├── txt/
+├── csv/
+├── excel/
+├── docx/
+└── pdf/
 ```
 
-Os padrões de extração ficam centralizados em `src/config.py`:
+Exemplos:
+
+```text
+output/txt/relatorio_inspecao_01.txt
+output/csv/dados_extraidos.csv
+output/excel/dados_extraidos.xlsx
+output/docx/relatorio_inspecao_01_relatorio.docx
+output/pdf/relatorio_inspecao_01_relatorio.pdf
+```
+
+## Configuração dos formatos
+
+Os formatos padrão ficam em `src/config.py`:
+
+```python
+output_formats = {
+    "txt": True,
+    "csv": True,
+    "xlsx": True,
+    "docx": False,
+    "pdf": False,
+}
+```
+
+Por padrão, TXT, CSV e Excel ficam ativos. DOCX e PDF final ficam desativados porque dependem do modelo Word e, para conversão PDF, do Microsoft Word disponível no ambiente.
+
+## Extração por Regex
+
+Os campos estruturados também ficam centralizados em `src/config.py`:
 
 ```python
 DEFAULT_REGEX_PATTERNS = {
@@ -161,36 +195,71 @@ DEFAULT_REGEX_PATTERNS = {
 }
 ```
 
+Quando um campo não é encontrado, a aplicação preenche `Não encontrado`, registra aviso no log e continua processando os próximos arquivos.
+
+## Exemplos
+
+A pasta `examples/` contém PDFs fictícios e resultados demonstrativos sem dados reais:
+
+```text
+examples/
+├── pdfs/
+│   ├── relatorio_inspecao_01.pdf
+│   ├── relatorio_inspecao_02.pdf
+│   └── relatorio_inspecao_03.pdf
+├── resultados/
+│   ├── exemplo_saida.txt
+│   ├── exemplo_saida.csv
+│   └── exemplo_saida.xlsx
+└── README.md
+```
+
+## Casos de uso
+
+- Digitalização de relatórios.
+- Consolidação de documentos.
+- Preparação de dados para análise.
+- Migração de informações.
+- Criação de bases para Power BI.
+- Geração de relatórios automatizados.
+- Auditoria do texto extraído antes da estruturação.
+
+## Testes
+
+Execute:
+
+```bash
+python -m unittest discover tests
+```
+
+A suíte cobre:
+
+- extração de texto;
+- exportação para TXT;
+- exportação para CSV;
+- exportação para Excel;
+- múltiplos PDFs;
+- campos não encontrados;
+- criação das pastas de saída;
+- argumentos da linha de comando.
+
 ## Prints
 
-![Exemplo de fluxo](docs/workflow.png)
+![Fluxo da aplicação](docs/workflow.png)
 
 ## GIF demonstrativo
 
 ![Demonstração](docs/demo.gif)
 
-## Qualidade de código
-
-O projeto foi preparado seguindo boas práticas de engenharia:
-
-- Responsabilidade única por arquivo.
-- Funções pequenas e reutilizáveis.
-- Type hints nos pontos principais.
-- Docstrings em português.
-- Tratamento de exceções com mensagens amigáveis.
-- Logs centralizados em arquivo e console.
-- Estrutura pronta para testes automatizados.
-- Separação entre entrada, saída, exemplos, documentação e código-fonte.
-
 ## Roadmap
 
-- Adicionar testes unitários com `pytest`.
-- Permitir configuração de regex por arquivo externo.
-- Criar interface de linha de comando com argumentos.
-- Adicionar suporte a múltiplos PDFs por execução.
-- Criar etapa de validação dos campos obrigatórios extraídos.
-- Automatizar geração de artefatos de demonstração para o README.
-- Configurar integração contínua no GitHub Actions.
+- Permitir configuração de Regex por arquivo externo.
+- Criar perfis de extração por tipo de documento.
+- Adicionar exportação para JSON.
+- Criar relatório de erros em arquivo separado.
+- Adicionar integração contínua com GitHub Actions.
+- Criar interface gráfica simples.
+- Adicionar suporte a OCR para PDFs escaneados.
 
 ## Licença
 

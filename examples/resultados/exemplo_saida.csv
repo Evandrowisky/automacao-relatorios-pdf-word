@@ -1,0 +1,4 @@
+﻿arquivo_origem;titulo;cliente;data;resumo
+relatorio_inspecao_01.pdf;Relatório de Inspeção 01;Empresa Fictícia Alfa;10/07/2026;Inspeção simulada de equipamentos internos sem dados reais.
+relatorio_inspecao_02.pdf;Relatório de Inspeção 02;Empresa Fictícia Beta;11/07/2026;Avaliação fictícia de documentos operacionais para demonstração.
+relatorio_inspecao_03.pdf;Relatório de Inspeção 03;Empresa Fictícia Gama;12/07/2026;Análise simulada de processo para teste de extração por regex.

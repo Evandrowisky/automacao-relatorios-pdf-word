@@ -37,6 +37,12 @@ def find_first_file(directory: Path, pattern: str) -> Path:
     return files[0]
 
 
+def find_files_by_pattern(directory: Path, pattern: str) -> list[Path]:
+    """Localiza arquivos que correspondem a um padrão glob."""
+
+    return sorted(directory.glob(pattern))
+
+
 def find_files(directory: Path, patterns: tuple[str, ...]) -> list[Path]:
     """Localiza arquivos que correspondem a um ou mais padrões glob."""
 
@@ -45,3 +51,10 @@ def find_files(directory: Path, patterns: tuple[str, ...]) -> list[Path]:
         files.extend(directory.glob(pattern))
 
     return sorted(set(files))
+
+
+def build_output_name(source_file: Path, suffix: str, extension: str) -> str:
+    """Monta um nome de saída padronizado a partir do arquivo de origem."""
+
+    clean_suffix = f"_{suffix}" if suffix else ""
+    return f"{source_file.stem}{clean_suffix}.{extension.lstrip('.')}"

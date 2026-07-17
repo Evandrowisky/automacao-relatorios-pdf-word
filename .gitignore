@@ -22,6 +22,7 @@ htmlcov/
 # Saídas geradas pela automação
 output/*
 !output/.gitkeep
+tmp/
 
 # Arquivos de entrada locais
 input/pdf/*

@@ -1,0 +1,12 @@
+ARQUIVO DE ORIGEM: relatorio_inspecao_01.pdf
+
+================ PÁGINA 1 ================
+
+Título: Relatório de Inspeção 01
+Cliente: Empresa Fictícia Alfa
+Data: 10/07/2026
+Resumo: Inspeção simulada de equipamentos internos sem dados reais.
+
+================ PÁGINA 2 ================
+
+Observação: Nenhuma não conformidade crítica foi identificada.
